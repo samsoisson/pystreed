@@ -88,7 +88,7 @@ class BaseSTreeDSolver(BaseEstimator):
             num_hyper_runs: the number of validation runs per configuration when tuning the hyperparameters
             verbose: Enable/Disable verbose output
             print_intermediates: Enable/Disable printing intermediate solutions
-            random_seed: the random seed used by the solver (for example when creating folds)
+            random_seed: the random seed used by the solver and randomized preprocessing; -1 uses an unfixed seed
             continuous_binarization_strategy: the strategy used for binarizing continuous features
             n_thresholds: the number of thresholds to use per continuous feature
             n_categories: the number of categories to use per categorical feature
@@ -241,7 +241,11 @@ class BaseSTreeDSolver(BaseEstimator):
         Binarize the non-binary, non-categorical features (the continuous features) into self.n_thresholds binary features
         """
         if reset:
-            self.binarizer_ = Binarizer(self.continuous_binarize_strategy, self.n_thresholds, self.n_categories, categorical_columns, self.max_num_binary_features)
+            self.binarizer_ = Binarizer(
+                self.continuous_binarize_strategy, self.n_thresholds, self.n_categories,
+                categorical_columns, self.max_num_binary_features,
+                random_state=None if self.random_seed == -1 else int(self.random_seed),
+            )
             self.binarizer_.fit(X, y)
         return self.binarizer_.transform(X)
 

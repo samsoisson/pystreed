@@ -37,7 +37,7 @@ def _escape(obj):
 
 class Binarizer:
 
-    def __init__(self, continuous_strategy, n_thresholds, n_categories, categorical_columns, max_num_binary_features = None):
+    def __init__(self, continuous_strategy, n_thresholds, n_categories, categorical_columns, max_num_binary_features = None, random_state=None):
         """
         Initialize a binarizer
 
@@ -46,7 +46,9 @@ class Binarizer:
         n_thresholds: int or array-like, the number of tresholds to use for continuous features. If an array, it should have a number for every continuous feature
         n_categories: int or array-like, the number of categories to turn every categorical feature into. If an array, it should have a number for every categorical feature
         categorical_columns: array-like, the names of the categorical feature columns
+        random_state: optional seed for tree binarization and random-forest feature selection
         """
+        self.random_state = random_state
         self.continuous_strategy = continuous_strategy
         self.n_thresholds = n_thresholds
         self.n_categories = n_categories
@@ -84,7 +86,7 @@ class Binarizer:
             self.categorical_binarizer = CategoricalBinarizer(self.n_categories) 
             self.categorical_binarizer.fit(X_cat)
         if len(self.continuous_columns) > 0:
-            self.continuous_binarizer = KThresholdBinarizer(self.continuous_strategy, self.n_thresholds)
+            self.continuous_binarizer = KThresholdBinarizer(self.continuous_strategy, self.n_thresholds, random_state=self.random_state)
             self.continuous_binarizer.fit(X_cont, y)
 
         if not self.max_num_binary_features is None:
@@ -92,7 +94,7 @@ class Binarizer:
                 warnings.warn("Cannot limit the number of binary features, because the class label y is None")
                 return
             X_trans = self.transform(X)
-            self.binary_feature_limiter = RandomForestFeatureSelector(self.max_num_binary_features)
+            self.binary_feature_limiter = RandomForestFeatureSelector(self.max_num_binary_features, random_state=self.random_state)
             self.binary_feature_limiter.fit(X_trans, y)
 
     def transform(self, X):
@@ -254,7 +256,8 @@ class KThresholdBinarizer(BaseEstimator, TransformerMixin):
         "n_thresholds": [Interval(numbers.Integral, 1, None, closed="left"), "array-like"]
     }
 
-    def __init__(self, strategy="quantile", n_thresholds=10):
+    def __init__(self, strategy="quantile", n_thresholds=10, random_state=None):
+        self.random_state = random_state
         self.strategy = strategy
         self.n_thresholds = n_thresholds
 
@@ -331,7 +334,7 @@ class KThresholdBinarizer(BaseEstimator, TransformerMixin):
                 is_classification = issubclass(y.dtype.type, np.integer) and len(np.unique(y)) <= 10
                 Ml_model = DecisionTreeClassifier if is_classification else DecisionTreeRegressor
                 #error_function = 'accuracy' if is_classification else "neg_mean_squared_error"
-                model = Ml_model(max_leaf_nodes=n_thresholds[jj] + 1)
+                model = Ml_model(max_leaf_nodes=n_thresholds[jj] + 1, random_state=self.random_state)
                 model.fit(_X, y)
                 cutpoints = sorted([t for t in model.tree_.threshold if t != sklearn.tree._tree.TREE_UNDEFINED])
             n_thresholds[jj] = len(cutpoints)
@@ -365,13 +368,14 @@ class KThresholdBinarizer(BaseEstimator, TransformerMixin):
     
 class RandomForestFeatureSelector(BaseEstimator, TransformerMixin):
     
-    def __init__(self, max_num_binary_features : int):
+    def __init__(self, max_num_binary_features : int, random_state=None):
         self.max_num_binary_features = max_num_binary_features
+        self.random_state = random_state
 
     def fit(self, X, y):
         is_classification = issubclass(y.dtype.type, np.integer) and len(np.unique(y)) <= 10
         rf_model = RandomForestClassifier if is_classification else RandomForestRegressor
-        rf = rf_model(n_estimators=100)
+        rf = rf_model(n_estimators=100, random_state=self.random_state)
         rf.fit(X, y)
         importances = rf.feature_importances_        
         indices = np.argsort(importances)[-self.max_num_binary_features:]

@@ -1,0 +1,23 @@
+dataset,n_samples,n_features,dl85_depth4_runtime_s,murtree_depth4_runtime_s,streed_depth4_runtime_s,dl85_depth5_runtime_s,murtree_depth5_runtime_s,streed_depth5_runtime_s,n_runs,timeout_s
+anneal,812,93,2,< 1,< 1,17,2,5,5,600
+audiology,216,148,4,< 1,< 1,< 1,< 1,< 1,5,600
+australian-credit,653,125,23,1,2,-,21,37,5,600
+breast-wisconsin,683,120,4,< 1,1,15,1,7,5,600
+diabetes,768,112,24,1,2,-,22,34,5,600
+fico,10459,17,< 1,< 1,< 1,< 1,1,2,5,600
+german-credit,1000,112,36,2,3,-,61,94,5,600
+heart-cleveland,296,95,6,< 1,< 1,80,3,7,5,600
+hepatitis,137,68,< 1,< 1,< 1,2,< 1,< 1,5,600
+hypothyroid,3247,88,5,1,< 1,94,13,11,5,600
+ionosphere,351,445,-,69,152,-,146,112,5,600
+kr-vs-kp,3196,73,2,< 1,< 1,18,6,4,5,600
+letter,20000,224,547,200,145,-,-,-,5,600
+lymph,148,68,1,< 1,< 1,< 1,< 1,< 1,5,600
+mushroom,8124,119,3,< 1,< 1,1,< 1,< 1,5,600
+pendigits,7494,216,160,60,74,-,240,109,5,600
+soybean,630,50,< 1,< 1,< 1,6,< 1,1,5,600
+splice-1,3190,287,-,148,156,-,-,-,5,600
+tic-tac-toe,958,27,< 1,< 1,< 1,2,< 1,< 1,5,600
+vehicle,846,252,79,8,15,-,137,343,5,600
+vote,435,48,< 1,< 1,< 1,5,< 1,1,5,600
+yeast,1484,89,10,< 1,1,280,13,18,5,600
