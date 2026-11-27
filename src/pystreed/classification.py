@@ -88,7 +88,7 @@ class STreeDClassifier(BaseSTreeDSolver, ClassifierMixin):
             max_num_binary_features: the maximum number of binary features (selected by random forest feature importance)
         """
         if not optimization_task in ["accuracy", "cost-complex-accuracy",
-            "balanced-accuracy", "f1-score", "accuracy-flex"]:
+            "balanced-accuracy", "f1-score", "mcc", "accuracy-flex"]:
             raise ValueError(f"Invalid value for optimization_task: {optimization_task}")
         BaseSTreeDSolver.__init__(self, optimization_task, 
             max_depth=max_depth,
@@ -116,8 +116,8 @@ class STreeDClassifier(BaseSTreeDSolver, ClassifierMixin):
             n_categories=n_categories,
             max_num_binary_features=max_num_binary_features)
         self.use_task_lower_bound = use_task_lower_bound
-        if optimization_task == "f1-score" and upper_bound != 2**31-1:
-            warnings.warn(f"upper_bound parameter is ignored for f1-score", stacklevel=2)
+        if optimization_task in ("f1-score", "mcc") and upper_bound != 2**31-1:
+            warnings.warn(f"upper_bound parameter is ignored for {optimization_task}", stacklevel=2)
         if optimization_task != "accuracy-flex" and accuracy_objective != "misclassification-score":
             warnings.warn(f"accuracy_objective parameter is only used for the accuracy-flex optimization task", stacklevel=2)
         if optimization_task != "accuracy-flex" and tune_method != "tree-size":
@@ -158,8 +158,17 @@ class STreeDClassifier(BaseSTreeDSolver, ClassifierMixin):
             ValueError: If x or y is None or if they have different number of rows.
         """
         self.classes_ = list(sorted(np.unique(y)))
+        if self.optimization_task == "mcc" and self.classes_ != [0, 1]:
+            raise ValueError("MCC training requires both binary labels 0 and 1. "
+                             "Encode labels as 0/1 before fitting.")
         self.n_classes_ = len(self.classes_)
         return super().fit(X, y, extra_data, categorical)
+
+    def _process_score_data(self, X, y=None):
+        if self.optimization_task == "mcc" and y is not None:
+            if not np.isin(np.asarray(y), [0, 1]).all():
+                raise ValueError("MCC scoring requires binary labels 0 and 1.")
+        return super()._process_score_data(X, y)
 
     def predict_proba(self, X, extra_data=None):
         """

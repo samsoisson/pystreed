@@ -1,4 +1,5 @@
 #include "model/data.h"
+#include <stdexcept>
 
 namespace STreeD {
 
@@ -27,6 +28,9 @@ namespace STreeD {
 	}
 
 	void ADataView::SplitData(int feature, ADataView& left, ADataView& right) const {
+		if (data == nullptr || feature < 0 || feature >= NumFeatures()) {
+			throw std::out_of_range("Cannot split data on invalid feature " + std::to_string(feature));
+		}
 		left.data = data;
 		right.data = data;
 		left.instances.resize(NumLabels());

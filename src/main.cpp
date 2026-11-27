@@ -72,6 +72,9 @@ int main(int argc, char* argv[]) {
 	} else if (task == "instance-cost-sensitive") {
 		solver = new STreeD::Solver<STreeD::InstanceCostSensitive>(parameters, &rng);
 		STreeD::FileReader::ReadData<STreeD::InstanceCostSensitive>(parameters, data, train_data, test_data, &rng);
+	} else if (task == "mcc") {
+		solver = new STreeD::Solver<STreeD::MCC>(parameters, &rng);
+		STreeD::FileReader::ReadData<STreeD::MCC>(parameters, data, train_data, test_data, &rng);
 	} else if (task == "f1-score") {
 		solver =  new STreeD::Solver<STreeD::F1Score>(parameters, &rng);
 		STreeD::FileReader::ReadData<STreeD::F1Score>(parameters, data, train_data, test_data, &rng);

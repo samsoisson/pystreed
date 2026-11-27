@@ -1,6 +1,7 @@
 #include "solver/solver.h"
 #include "utils/debug.h"
 #include "utils/utils.h"
+#include <stdexcept>
 
 namespace STreeD {
 
@@ -1071,6 +1072,9 @@ namespace STreeD {
 
 	template<class OT>
 	std::shared_ptr<Tree<OT>> Solver<OT>::ConstructOptimalTree(const Node<OT>& sol, ADataView& data, const Solver<OT>::Context& context, int max_depth, int num_nodes) {
+		if (!sol.IsFeasible()) {
+			throw std::runtime_error("Cannot reconstruct an infeasible tree node.");
+		}
 		runtime_assert(num_nodes >= 0);
 		stopwatch.Disable();
 		max_depth = std::min(max_depth, num_nodes);
@@ -1178,8 +1182,14 @@ namespace STreeD {
 			auto empty_final_sols = std::shared_ptr<Container<OT>>(nullptr);
 			Merge<true>(sol.feature, context, UB, left_sols, right_sols, branching_costs, empty_final_sols, &tree_node);
 
-			runtime_assert(tree_node.left_child.IsFeasible());
-			runtime_assert(tree_node.right_child.IsFeasible());
+			// Python extension builds disable runtime_assert. Never let an unmatched
+			// reconstruction turn sentinel labels/features into a malformed tree.
+			if (!tree_node.left_child.IsFeasible() || !tree_node.right_child.IsFeasible()) {
+				throw std::runtime_error("Tree reconstruction could not match child solutions: feature="
+					+ std::to_string(sol.feature) + ", branch_depth=" + std::to_string(branch.Depth())
+					+ ", left_nodes=" + std::to_string(left_subtree_size)
+					+ ", right_nodes=" + std::to_string(right_subtree_size));
+			}
 
 			tree->left_child = ConstructOptimalTree(tree_node.left_child, left_data, left_context, left_depth, left_size);
 			tree->right_child = ConstructOptimalTree(tree_node.right_child, right_data, right_context, right_depth, right_size);
@@ -1404,6 +1414,7 @@ namespace STreeD {
 	template class Solver<CostSensitive>;
 	template class Solver<InstanceCostSensitive>;
 	template class Solver<F1Score>;
+	template class Solver<MCC>;
 	template class Solver<GroupFairness>;
 	template class Solver<EqOpp>;
 	template class Solver<PrescriptivePolicy>;

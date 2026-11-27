@@ -19,7 +19,7 @@ class BaseSTreeDSolver(BaseEstimator):
         "optimization_task": [StrOptions({"accuracy", "cost-complex-accuracy", "balanced-accuracy", 
                                           "regression", "cost-complex-regression", 
                                           "piecewise-linear-regression", "simple-linear-regression",
-                                          "cost-sensitive", "f1-score", "prescriptive-policy", "instance-cost-sensitive",
+                                          "cost-sensitive", "f1-score", "mcc", "prescriptive-policy", "instance-cost-sensitive",
                                           "group-fairness", "equality-of-opportunity", "survival-analysis",
                                           "accuracy-flex"})],
         "max_depth": [Interval(numbers.Integral, 0, 20, closed="both")],

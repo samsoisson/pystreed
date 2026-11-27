@@ -514,6 +514,7 @@ namespace STreeD {
 	template class TerminalSolver<CostSensitive>;
 	template class TerminalSolver<InstanceCostSensitive>;
 	template class TerminalSolver<F1Score>;
+	template class TerminalSolver<MCC>;
 	template class TerminalSolver<GroupFairness>;
 	template class TerminalSolver<EqOpp>;
 	template class TerminalSolver<PrescriptivePolicy>;

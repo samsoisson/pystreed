@@ -15,6 +15,7 @@
 #include "tasks/cost_sensitive.h"
 #include "tasks/instance_cost_sensitive.h"
 #include "tasks/f1score.h"
+#include "tasks/mcc.h"
 #include "tasks/group_fairness.h"
 #include "tasks/eq_opp.h"
 #include "tasks/prescriptive_policy.h"

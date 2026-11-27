@@ -71,6 +71,7 @@ set(STREED_HEADER_FILES
 	${PROJECT_INCLUDE_DIR}/tasks/cost_sensitive.h
 	${PROJECT_INCLUDE_DIR}/tasks/instance_cost_sensitive.h
 	${PROJECT_INCLUDE_DIR}/tasks/f1score.h
+	${PROJECT_INCLUDE_DIR}/tasks/mcc.h
 	${PROJECT_INCLUDE_DIR}/tasks/group_fairness.h
 	${PROJECT_INCLUDE_DIR}/tasks/eq_opp.h
 	${PROJECT_INCLUDE_DIR}/tasks/prescriptive_policy.h
@@ -121,6 +122,7 @@ set(STREED_SRC_FILES
 	${PROJECT_SOURCE_DIR}/tasks/cost_sensitive.cpp
 	${PROJECT_SOURCE_DIR}/tasks/instance_cost_sensitive.cpp
 	${PROJECT_SOURCE_DIR}/tasks/f1score.cpp
+	${PROJECT_SOURCE_DIR}/tasks/mcc.cpp
 	${PROJECT_SOURCE_DIR}/tasks/group_fairness.cpp
 	${PROJECT_SOURCE_DIR}/tasks/eq_opp.cpp
 	${PROJECT_SOURCE_DIR}/tasks/prescriptive_policy.cpp
@@ -171,3 +173,6 @@ set(PROJECT_TEST_DIR "test")
 add_executable(CorrectSolutionTest ${PROJECT_TEST_DIR}/correct_solution_test.cpp)
 target_link_libraries (CorrectSolutionTest STREEDLib)
 add_test(NAME "CorrectSolutionTest" COMMAND CorrectSolutionTest WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+add_executable(MCCTest ${PROJECT_TEST_DIR}/mcc_test.cpp)
+target_link_libraries(MCCTest STREEDLib)
+add_test(NAME "MCCTest" COMMAND MCCTest)

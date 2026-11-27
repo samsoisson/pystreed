@@ -114,6 +114,13 @@ Currently, STreeD implements the following optimization tasks:
 * `accuracy`: Minimizes the misclassification score. 
 * `cost-complex-accuracy`: Minimizes the misclassification score plus the cost for adding a branching node by the parameter `cost_complexity`.
 * `f1-score`: Maximizes the F1-score.
+* `mcc`: Maximizes the Matthews correlation coefficient for binary classification.
+  Training requires both labels `0` and `1`; encode other labels before fitting.
+  Constant predictions or single-class evaluation data receive an MCC of zero.
+  Use `STreeDClassifier(optimization_task="mcc", max_depth=3)` and evaluate
+  with `model.score(X_test, y_test)` or `sklearn.metrics.matthews_corrcoef`.
+  Like F1, MCC retains additive false-negative/false-positive counts while searching
+  and compares complete trees by the selected metric. It does not sum leaf MCCs.
 * `accuracy-flex`: Minimizes a variety of classification objectives, which can be set through the `accuracy_objective` parameter:
    * `misclassification-score`: The number of misclassifications.
    * `gini-index`: The Gini impurity.

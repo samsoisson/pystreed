@@ -170,6 +170,7 @@ namespace STreeD {
 	template void FileReader::ReadData<CostSensitive>(ParameterHandler&, AData&, ADataView&, ADataView&, std::default_random_engine*);
 	template void FileReader::ReadData<InstanceCostSensitive>(ParameterHandler&, AData&, ADataView&, ADataView&, std::default_random_engine*);
 	template void FileReader::ReadData<F1Score>(ParameterHandler&, AData&, ADataView&, ADataView&, std::default_random_engine*);
+	template void FileReader::ReadData<MCC>(ParameterHandler&, AData&, ADataView&, ADataView&, std::default_random_engine*);
 	template void FileReader::ReadData<GroupFairness>(ParameterHandler&, AData&, ADataView&, ADataView&, std::default_random_engine*);
 	template void FileReader::ReadData<EqOpp>(ParameterHandler&, AData&, ADataView&, ADataView&, std::default_random_engine*);
 	template void FileReader::ReadData<PrescriptivePolicy>(ParameterHandler&, AData&, ADataView&, ADataView&, std::default_random_engine*);

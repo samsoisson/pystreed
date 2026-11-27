@@ -250,6 +250,7 @@ namespace STreeD {
 	template class BranchCache<CostSensitive>;
 	template class BranchCache<InstanceCostSensitive>;
 	template class BranchCache<F1Score>;
+	template class BranchCache<MCC>;
 	template class BranchCache<GroupFairness>;
 	template class BranchCache<EqOpp>;
 	template class BranchCache<PrescriptivePolicy>;

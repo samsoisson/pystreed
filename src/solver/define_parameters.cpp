@@ -22,7 +22,7 @@ namespace STreeD {
 			"Main Parameters",
 
 			{"accuracy", "cost-complex-accuracy", "accuracy-flex", "balanced-accuracy",
-			"f1-score", "group-fairness", "survival-analysis",
+			"f1-score", "mcc", "group-fairness", "survival-analysis",
 			"regression", "cost-complex-regression", "piecewise-linear-regression",
 			"simple-linear-regression", "equality-of-opportunity", "cost-sensitive",
 			"prescriptive-policy", "instance-cost-sensitive" }

@@ -154,6 +154,7 @@ namespace STreeD {
 	template class SimilarityLowerBoundComputer<CostSensitive>;
 	template class SimilarityLowerBoundComputer<InstanceCostSensitive>;
 	template class SimilarityLowerBoundComputer<F1Score>;
+	template class SimilarityLowerBoundComputer<MCC>;
 	template class SimilarityLowerBoundComputer<GroupFairness>;
 	template class SimilarityLowerBoundComputer<EqOpp>;
 	template class SimilarityLowerBoundComputer<PrescriptivePolicy>;

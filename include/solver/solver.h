@@ -63,6 +63,7 @@ namespace STreeD {
 	class AbstractSolver {
 	public:
 		AbstractSolver(ParameterHandler& parameters, std::default_random_engine* rng);
+		virtual ~AbstractSolver() = default;
 		void UpdateParameters(const ParameterHandler& parameters);
 		inline const ParameterHandler& GetParameters() const { return parameters; }
 		virtual std::shared_ptr<SolverResult> Solve(const ADataView& train_data) = 0;
@@ -117,7 +118,7 @@ namespace STreeD {
 			&& OT::constant_branching_costs && (std::is_same<typename OT::SolType, double>::value || std::is_same<typename OT::SolType, int>::value);
 
 		Solver(ParameterHandler& parameters, std::default_random_engine* rng);
-		~Solver();
+		~Solver() override;
 
 		/*
 		* Initialize

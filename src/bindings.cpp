@@ -23,6 +23,7 @@ enum task_type {
     cost_sensitive,
     instance_cost_sensitive,
     f1score,
+    mcc,
     group_fairness,
     equality_of_opportunity,
     prescriptive_policy,
@@ -41,6 +42,7 @@ task_type get_task_type_code(std::string& task) {
     else if (task == "cost-sensitive") return cost_sensitive;
     else if (task == "instance-cost-sensitive") return instance_cost_sensitive;
     else if (task == "f1-score") return f1score;
+    else if (task == "mcc") return mcc;
     else if (task == "group-fairness") return group_fairness;
     else if (task == "equality-of-opportunity") return equality_of_opportunity;
     else if (task == "prescriptive-policy") return prescriptive_policy;
@@ -288,6 +290,7 @@ PYBIND11_MODULE(cstreed, m) {
     DefineSolver<AccuracyFlex>(m, "AccuracyFlex");
     DefineSolver<BalancedAccuracy>(m, "BalancedAccuracy");
     DefineSolver<F1Score>(m, "F1Score");
+    DefineSolver<MCC>(m, "MCC");
     DefineSolver<Regression>(m, "Regression");
     DefineSolver<CostComplexRegression>(m, "CostComplexRegression");
     DefineSolver<SimpleLinearRegression>(m, "SimpleLinearRegression");
@@ -322,6 +325,7 @@ PYBIND11_MODULE(cstreed, m) {
             case cost_sensitive: solver = new Solver<CostSensitive>(parameters, &rng); break;
             case instance_cost_sensitive: solver = new Solver<InstanceCostSensitive>(parameters, &rng); break;
             case f1score: solver = new Solver<F1Score>(parameters, &rng); break;
+            case mcc: solver = new Solver<MCC>(parameters, &rng); break;
             case group_fairness: solver = new Solver<GroupFairness>(parameters, &rng); break;
             case equality_of_opportunity: solver = new Solver<EqOpp>(parameters, &rng); break;
             case prescriptive_policy: solver = new Solver<PrescriptivePolicy>(parameters, &rng); break;
